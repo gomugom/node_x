@@ -21,8 +21,6 @@ User.belongsToMany(User, { // 팔로잉
     through: 'Follow',
 });
 
-sequelize.sync({force: false, alter: true}).then(() => console.log('db connection success')).catch((err) => console.error('DB connection Fail'));
-
 module.exports = {
     User,  Post,  HashTag,
 }

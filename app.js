@@ -38,6 +38,8 @@ app.use(session({
     }
 }));
 
+sequelize.sync({force: false, alter: true}).then(() => console.log('db connection success')).catch((err) => console.error('DB connection Fail'));
+
 app.use('/', pageRouter);
 
 // 404 not found
