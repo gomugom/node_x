@@ -5,6 +5,8 @@ const path = require('path');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
+const { sequelize } = require('./models/db');
+const dbConfig = require('./models');
 
 dotenv.config(); // process.env
 

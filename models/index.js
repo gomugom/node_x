@@ -1,43 +1,28 @@
-'use strict';
+const User = require('./user');
+const Post = require('./post');
+const HashTag = require('./hashtag');
+const {sequelize} = require("./db");
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+// 관계 생성
+// User : Post = 1: N
+User.hasMany(Post);
+Post.belongsTo(User);
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+// 사용자 : 사용자 = N : M (팔로잉 관계)
+User.belongsToMany(User, { // 팔로워
+    foreignKey: 'followingId',
+    as: 'Followers',
+    through: 'Follow' // 중간테이블
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+User.belongsToMany(User, { // 팔로잉
+    foreignKey: 'followerId',
+    as: 'Followings',
+    through: 'Follow',
+});
 
-module.exports = db;
+sequelize.sync({force: false, alter: true}).then(() => console.log('db connection success')).catch((err) => console.error('DB connection Fail'));
+
+module.exports = {
+    User,  Post,  HashTag,
+}
