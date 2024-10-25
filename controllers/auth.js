@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 // 회원가입 라우터
 exports.joinController = async (req, res, next) => {
@@ -36,5 +37,17 @@ exports.joinController = async (req, res, next) => {
 
     // 생성까지 완료됐으면 다시 로그인할 수 있도록 메인으로 이동
     return res.redirect('/');
+
+}
+
+// 로그인 컨트롤러
+exports.loginController = (req, res, next) => {
+    // authenticate의 첫번째 인자가 strategy 이름
+    passport.authenticate('local', () => {
+        req.login();
+    });
+}
+
+exports.logoutController = (req, res, next) => {
 
 }

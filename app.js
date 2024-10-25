@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 const { sequelize } = require('./models/db');
 const dbConfig = require('./models');
 const authRouter = require('./routes/auth');
+const passport = require('passport');
+const passportConfig = require('./config/passport/passport');
 
 dotenv.config(); // process.env
 
@@ -38,6 +40,12 @@ app.use(session({
         secure: false, // https 처리 적용하게 되면 true로 변경
     }
 }));
+
+// Passport 초기화 => 반드시 express-session 설정 밑에 와야함
+app.use(passport.initialize()); // req.isAuthenticated, req.user, passport.authenticated 등을 생성해줌
+app.use(passport.session()); // 세션에 저장되는 부분
+
+passportConfig();
 
 sequelize.sync({force: false, alter: true}).then(() => console.log('db connection success')).catch((err) => console.error('DB connection Fail'));
 
