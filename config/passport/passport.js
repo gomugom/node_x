@@ -2,6 +2,7 @@
 
 const passport = require('passport');
 const localStrategy = require('./localStrategy');
+const kakaoStrategy = require('./kakaoStrategy');
 const User = require('../../models/user');
 
 /*
@@ -28,8 +29,11 @@ const User = require('../../models/user');
 
 module.exports = () => {
 
-    // Passport Local 전략 설정
+    // Passport Local 전략 설정 등록
     localStrategy();
+
+    // kakao strategy 등록
+    kakaoStrategy();
 
     // 사용자 직렬화/역직렬화
     passport.serializeUser((user, done) => {

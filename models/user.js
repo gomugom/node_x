@@ -32,6 +32,8 @@ const User = sequelize.define('User', {
     modelName: "User", // javascript에서 쓰는 이름
     tableName: "Users", // MySQL DB 이름
     paranoid: true, // deletedAt이 자동생성됨
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
     // charset: 'utf8',
     // collate: 'utf8mb4_general_ci' // 이모티콘까지 저장필요시 mb4붙여서 생성
 });

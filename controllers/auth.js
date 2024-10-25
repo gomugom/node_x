@@ -60,7 +60,7 @@ exports.loginController = (req, res, next) => {
                 return next(loginError);
             }
             return res.redirect('/');
-        })
+        });
         // req.login();
     })(req,  res, next); // 내 미들웨어 안에 미들웨어를 등록하는 미들웨어 확장시 (req, res, next)를 한번 더 붙인다.
 }
@@ -70,6 +70,10 @@ exports.logoutController = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.redirect('/');
+        req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.redirect('/');
+        });
+        // res.redirect('/');
     });
 }
