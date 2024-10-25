@@ -7,6 +7,7 @@ const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 const { sequelize } = require('./models/db');
 const dbConfig = require('./models');
+const authRouter = require('./routes/auth');
 
 dotenv.config(); // process.env
 
@@ -41,6 +42,9 @@ app.use(session({
 sequelize.sync({force: false, alter: true}).then(() => console.log('db connection success')).catch((err) => console.error('DB connection Fail'));
 
 app.use('/', pageRouter);
+
+// 회원가입, 로그인 처리용 라우터 분리
+app.use('/auth', authRouter);
 
 // 404 not found
 app.use((req, res, next) => {
