@@ -6,6 +6,6 @@ const {isLoggedIn, isNotLoggedIn} = require("../middlewares");
 // /auth/join(회원가입)
 router.post('/join', isNotLoggedIn, joinController);
 router.post('/login', isNotLoggedIn, loginController);
-router.post('/logout', isLoggedIn, logoutController);
+router.get('/logout', isLoggedIn, logoutController);
 
 module.exports = router;

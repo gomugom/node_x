@@ -7,7 +7,9 @@ const {isNotLoggedIn, isLoggedIn} = require("../middlewares");
 router.use((req, res, next) => {
    // locals(지역변수)에 저장시 다른 라우터 들에서 다 접근이 가능함 : 미들웨어, 뷰간 데이터 전달이 가능함
     // 해당 요청이 끝나면 사라짐
-   res.locals.user = null;
+   // => 즉, 미들웨어간에 공유되는 데이터(한번의 요청)
+   // req.session은 사용자 간에 공유되는 데이터(같은 사용자)
+   res.locals.user = req.user;
    res.locals.followerCount = 0;
    res.locals.followingCount = 0;
    res.locals.followingIdList = [];

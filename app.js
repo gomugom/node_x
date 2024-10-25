@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); // json 요청 허용
 app.use(express.urlencoded({extended: false})); // form 요청 허용
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 처리용
-app.use(session({
+app.use(session({ // 기본은 메모리에 저장 -> 나중엔 Redis같은대 저장
     resave: false,
     saveUninitialized: false,
     secret: process.env.COOKIE_SECRET,

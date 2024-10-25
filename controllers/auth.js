@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const {login} = require("passport/lib/http/request");
 
 // 회원가입 라우터
 exports.joinController = async (req, res, next) => {
@@ -43,11 +44,32 @@ exports.joinController = async (req, res, next) => {
 // 로그인 컨트롤러
 exports.loginController = (req, res, next) => {
     // authenticate의 첫번째 인자가 strategy 이름
-    passport.authenticate('local', () => {
-        req.login();
-    });
+    passport.authenticate('local', (authError, user, info) => {
+        // strategy에서 done호출시 일로 이동됨
+        if (authError) { // server error
+            console.error(authError);
+            next(authError); // 에러처리 미들웨어로 이동
+        }
+        if (!user) { // 로직실패
+            return res.redirect(`/?loginError=${info.message}`); // layout.html에서 alert 발생
+        }
+
+        req.login(user, (loginError) => {
+            if (loginError) {
+                console.error(loginError);
+                return next(loginError);
+            }
+            return res.redirect('/');
+        })
+        // req.login();
+    })(req,  res, next); // 내 미들웨어 안에 미들웨어를 등록하는 미들웨어 확장시 (req, res, next)를 한번 더 붙인다.
 }
 
 exports.logoutController = (req, res, next) => {
-
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('/');
+    });
 }
