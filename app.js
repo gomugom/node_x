@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const { sequelize } = require('./models/db');
 const dbConfig = require('./models');
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/post');
 const passport = require('passport');
 const passportConfig = require('./config/passport/passport');
 
@@ -25,8 +26,11 @@ nunjucks.configure('views', {
 });
 
 app.use(morgan('dev')); // dev : 자세한 개발용 로그, combined : 상용 배포용(간단한 로그)
+
 // static 정적 파일 설정
 app.use(express.static(path.join(__dirname, 'public')));
+// /img로 시작하는 요청이 있을 때 => ex) /img/file_name.jpg 로 => /__dirname path/uploads/file_name.jpg를 찾게 됨
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.json()); // json 요청 허용
 app.use(express.urlencoded({extended: false})); // form 요청 허용
@@ -53,6 +57,9 @@ app.use('/', pageRouter);
 
 // 회원가입, 로그인 처리용 라우터 분리
 app.use('/auth', authRouter);
+
+// 게시글, 이미지 업로드용 라우터
+app.use('/post', postRouter);
 
 // 404 not found
 app.use((req, res, next) => {
