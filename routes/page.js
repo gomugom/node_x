@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { renderJoinController, renderProfileController, renderMainController} = require('../controllers/page');
+const { renderJoinController, renderProfileController, renderMainController, renderHashtagController} = require('../controllers/page');
 const {isNotLoggedIn, isLoggedIn} = require("../middlewares");
 
 router.use((req, res, next) => {
@@ -10,9 +10,9 @@ router.use((req, res, next) => {
    // => 즉, 미들웨어간에 공유되는 데이터(한번의 요청)
    // req.session은 사용자 간에 공유되는 데이터(같은 사용자)
    res.locals.user = req.user;
-   res.locals.followerCount = 0;
-   res.locals.followingCount = 0;
-   res.locals.followingIdList = [];
+   res.locals.followerCount = req.user?.Followers?.length || 0;
+   res.locals.followingCount = req.user?.Followings?.length || 0;
+   res.locals.followingIdList = req.user?.Followings?.map(e => e.id) || [];
    next(); // next 호출해야 다음 라우터가 실행될 수 있음
 });
 
@@ -21,5 +21,8 @@ router.use((req, res, next) => {
 router.get('/profile', isLoggedIn, renderProfileController); // 로그인되어있는 경우 rednerProfileController 실행
 router.get('/join', isNotLoggedIn, renderJoinController);
 router.get('/', renderMainController);
+
+// hashtag를 통해 게시글을 조회한다.
+router.get('/hashtag', renderHashtagController);
 
 module.exports = router;

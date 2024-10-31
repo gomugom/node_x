@@ -43,6 +43,18 @@ module.exports = () => {
     // 로그인 사용자 요청할 때 필요(로그인 후 사용자 정보 찾을 때)
     passport.deserializeUser((id, done) => {
        User.findOne({
+           include: [
+               {
+                   model: User,
+                   as: 'Followings',
+                   attributes: ['id', 'nick'],
+               },
+               {
+                   model: User,
+                   as: 'Followers',
+                   attributes: ['id', 'nick'],
+               }
+           ],
            where: {
                id,
            }

@@ -7,8 +7,11 @@ const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 const { sequelize } = require('./models/db');
 const dbConfig = require('./models');
+
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
+
 const passport = require('passport');
 const passportConfig = require('./config/passport/passport');
 
@@ -60,6 +63,9 @@ app.use('/auth', authRouter);
 
 // 게시글, 이미지 업로드용 라우터
 app.use('/post', postRouter);
+
+// 팔로우, 팔로잉
+app.use('/user', userRouter);
 
 // 404 not found
 app.use((req, res, next) => {
