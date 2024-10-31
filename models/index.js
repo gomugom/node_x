@@ -21,6 +21,15 @@ User.belongsToMany(User, { // 팔로잉
     through: 'Follow',
 });
 
+// Post : Hashtags = N : M
+Post.belongsToMany(HashTag, {
+    through: 'PostHashTag'
+});
+
+HashTag.belongsToMany(Post, {
+    through: 'PostHashTag'
+});
+
 module.exports = {
     User,  Post,  HashTag,
 }
