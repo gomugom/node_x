@@ -22,7 +22,7 @@ router.get('/profile', isLoggedIn, renderProfileController); // 로그인되어�
 router.get('/join', isNotLoggedIn, renderJoinController);
 router.get('/', renderMainController);
 
-// hashtag를 통해 게시글을 조회한다.
+// hashtag를 통해 게시글을 조회한다. /hashtag?hashtag=123 => req.query.hashtag
 router.get('/hashtag', renderHashtagController);
 
 module.exports = router;

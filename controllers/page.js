@@ -49,7 +49,8 @@ exports.renderHashtagController = async (req, res, next) => {
                     {
                         model: User, // Post안에 User도 포함시킴
                     }
-                ]
+                ],
+                order: [['createdAt', 'DESC']]
             }],
             where: {
                 title: req.query?.hashtag || ''
